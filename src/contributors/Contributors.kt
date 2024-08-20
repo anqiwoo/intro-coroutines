@@ -61,14 +61,14 @@ interface Contributors: CoroutineScope {
             BACKGROUND -> { // Blocking a background thread
                 loadContributorsBackground(service, req) { users ->
                     SwingUtilities.invokeLater {
-                        updateResults(users, startTime)
+                        updateResults(users, startTime) // Let it run on the main UI thread
                     }
                 }
             }
             CALLBACKS -> { // Using callbacks
                 loadContributorsCallbacks(service, req) { users ->
                     SwingUtilities.invokeLater {
-                        updateResults(users, startTime)
+                        updateResults(users, startTime) // Let it run on the main UI thread
                     }
                 }
             }
