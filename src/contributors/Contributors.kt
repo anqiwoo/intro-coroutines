@@ -73,15 +73,22 @@ interface Contributors: CoroutineScope {
                 }
             }
             SUSPEND -> { // Using coroutines
+                // The computation is suspendable
+                // – when performing network requests,
+                //      it is suspended and releases the underlying thread.
+                // - when the network request returns the result,
+                //      the computation is resumed.
                 launch {
                     val users = loadContributorsSuspend(service, req)
                     updateResults(users, startTime)
                 }.setUpCancellation()
             }
             CONCURRENT -> { // Performing requests concurrently
-                launch {
+                launch(Dispatchers.Default) {
                     val users = loadContributorsConcurrent(service, req)
-                    updateResults(users, startTime)
+                    withContext(Dispatchers.Main) {
+                        updateResults(users, startTime)
+                    }
                 }.setUpCancellation()
             }
             NOT_CANCELLABLE -> { // Performing requests in a non-cancellable way
