@@ -12,14 +12,14 @@ suspend fun loadContributorsChannels(
 ) {
     coroutineScope {
         val repos = service
-            .getOrgReposCall(req.org)
+            .getOrgRepos(req.org)
             .also { logRepos(req, it) }
             .bodyList()
 
         val channel = Channel<List<User>>()
         for (repo in repos) {
             launch {
-                val users = service.getRepoContributorsCall(req.org, repo.name)
+                val users = service.getRepoContributors(req.org, repo.name)
                     .also { logUsers(repo, it) }
                     .bodyList()
                 channel.send(users)

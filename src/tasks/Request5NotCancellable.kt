@@ -7,7 +7,7 @@ import kotlin.coroutines.coroutineContext
 
 suspend fun loadContributorsNotCancellable(service: GitHubService, req: RequestData): List<User> {
     val repos = service
-        .getOrgReposCall(req.org)
+        .getOrgRepos(req.org)
         .also { logRepos(req, it) }
         .bodyList()
 
@@ -16,7 +16,7 @@ suspend fun loadContributorsNotCancellable(service: GitHubService, req: RequestD
             log("starting loading for ${repo.name}")
             delay(3000)
             service
-                .getRepoContributorsCall(req.org, repo.name)
+                .getRepoContributors(req.org, repo.name)
                 .also { logUsers(repo, it) }
                 .bodyList()
         }

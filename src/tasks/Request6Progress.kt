@@ -8,13 +8,13 @@ suspend fun loadContributorsProgress(
     updateResults: suspend (List<User>, completed: Boolean) -> Unit
 ) {
     val repos = service
-        .getOrgReposCall(req.org)
+        .getOrgRepos(req.org)
         .also { logRepos(req, it) }
         .bodyList()
 
     var allUsers = emptyList<User>()
     for ((index, repo) in repos.withIndex()) {
-        val users = service.getRepoContributorsCall(req.org, repo.name)
+        val users = service.getRepoContributors(req.org, repo.name)
             .also { logUsers(repo, it) }
             .bodyList()
 
